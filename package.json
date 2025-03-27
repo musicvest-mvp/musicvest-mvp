@@ -1,0 +1,37 @@
+{
+  "name": "musicvest-mvp",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
+    "preview": "vite preview",
+    "predeploy": "npm run build && [ -f client/dist/index.html ] || (echo 'Error: client/dist/index.html not found' && exit 1)",
+    "deploy": "npm run predeploy && firebase deploy --only hosting,firestore:rules && npm run purge-cdn",
+    "purge-cdn": "curl -X PURGE https://musicvest-mvp.web.app"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/react": "^18.2.62",
+    "@types/react-dom": "^18.2.19",
+    "@types/socket.io": "^3.0.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^9.23.0",
+    "eslint-plugin-react": "^7.37.4",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vite": "^6.2.3",
+    "wouter": "2.12.1"
+  },
+  "dependencies": {
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
