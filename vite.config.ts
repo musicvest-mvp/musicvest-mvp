@@ -4,13 +4,13 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  root: "client/src",
+  root: "public",
   base: "/",
   build: {
-    outDir: "../dist",
+    outDir: "client/dist",
     emptyOutDir: true,
-    rollupOptions: {
-      external: [],
+     rollupOptions: {
+
     },
   },
   server: { host: "0.0.0.0", port: 5001 },
