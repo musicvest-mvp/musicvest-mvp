@@ -1,29 +1,35 @@
-import React from 'react';
-import { AuthProvider } from './hooks/use-auth';
-import { Switch, Route, useLocation } from 'wouter';
+import React from "react";
+import { Route, Switch } from "wouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "./lib/use-auth";
+import { ProtectedRoute } from "./lib/protected-route";
+import { Toaster, ToastProvider as CustomToastProvider } from "./components/ui"; // Import Toaster and ToastProvider
+import { HomePage } from "./pages/home-page";
+import { AuthPage } from "./pages/auth-page";
 
-const HomePage = React.lazy(() => import('./pages/home-page'));
-const AuthPage = React.lazy(() => import('./pages/auth-page'));
+const queryClient = new QueryClient();
 
-const App: React.FC = () => {
-    const [location] = useLocation();
-
-    const routes = [
-        { path: '/', component: HomePage },
-        { path: '/login', component: AuthPage },
-    ];
-
-    return (
-        <React.Suspense fallback={<div>Loading...</div>}>
-            <AuthProvider>
-                <Switch>
-                    {routes.map((route) => (
-                        <Route key={route.path} path={route.path} component={route.component} />
-                    ))}
-                </Switch>
-            </AuthProvider>
-        </React.Suspense>
-    );
+export const App: React.FC = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CustomToastProvider>
+          <Switch>
+            <Route path="/login">
+              <AuthPage />
+            </Route>
+            <Route path="/">
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            </Route>
+          </Switch>
+          <Toaster />
+        </CustomToastProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default App;
+

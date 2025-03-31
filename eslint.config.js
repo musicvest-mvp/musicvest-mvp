@@ -1,39 +1,18 @@
-// eslint.config.js
-import js from '@eslint/js';
-import react from 'eslint-plugin-react';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig:{},
+});
 
 export default [
-  js.configs.recommended,
-  react.configs.recommended,
-  jsxA11y.configs.recommended,
-  {
-    plugins: {
-      'react': react,
-      'jsx-a11y': jsxA11y ,
-       'import': importPlugin,
-    },
-    rules: {
-        ...react.configs.recommended.rules,
-      'react/react-in-jsx-scope': 'off',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-  },
-  {
-    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-    },
-  },
-  {
-    ignores: ['node_modules', 'client/dist'],
-  },
+    ...compat.config({ extends: ['eslint:recommended', 'plugin:react/recommended'] }),
+    ...compat.extends('plugin:@typescript-eslint/recommended'),
+    ...compat.plugins('react'),
+    { languageOptions: { parserOptions: { ecmaVersion: 'latest', sourceType: 'module', ecmaFeatures: { jsx: true } } }, rules: { indent: ['error', 2], quotes: ['error', 'single'], semi: ['error', 'always'] } },
 ];
